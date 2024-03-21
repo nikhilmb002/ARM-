@@ -1,0 +1,249 @@
+UART
+----
+
+*uart is a protocol as well as hardware (on chip peripheral of uc).
+
+
+why uart is used in embedded system ?
+
+*uart is designed of asynchronous serial communication to exchange data between uc's, PC, ext uart devices & other boards (arduino, raspberry pi, arm32).
+
+
+what is uart ?
+
+*The uart is onchip peripheral of uc which does parallel in - serial out & serial in - parallel out operations.
+
+while transmitting uart does parallel in serial out operation & while recieving, uart does serial in parallel out operation.
+
+
+Real time application / Projects designed by using uart protocol
+----------------------------------------------------------------
+
+1. Blutooth based projects
+
+2. GPS based projects
+
+3. Xbee based projects 
+
+4. Biometric sensor based projects
+
+5. RFID (Radio frequenct identity)  reader based project
+
+6. GSM based projects
+
+7. Remote login with single board computers
+
+
+
+Types of serial communications
+------------------------------
+
+1. synchronous serial communication
+
+2. Asynchronous serial communication
+
+
+Synchronous
+-----------
+
+* A common clock line is used between transmitter and reciever.
+
+* Clock line is used for synchronising tx and rx.
+
+
+
+
+
+ 		------------------		    -----------------
+		|		 |		    |		    |
+		|		 | 		    |	(slave)	    |
+		|		 |		    |		    |
+		|		 |----------------->|Any synchronous|
+		| 		 |    dataline	    |	  	    |
+		|     Any uc	 |  		    |	serial 	    |
+		|		 |		    | 		    |
+		|    (master)	 |		    |communication  |
+		|		 |----------------->| 		    |
+		|	  	 |    clockline	    |	device      |
+		|		 | 		    | 		    |
+		|		 |		    |	eg : EEPROM |
+		------------------		    -----------------
+		   Transmitter				Reciever
+	
+
+
+master can generate clock pulese. i.e direction of clock pulse is from master to slave.
+
+slave doesn't generate clock pulse. If it does synchronization doen't exist.
+
+
+dataline ------> exchange data
+
+clockline -----> synchronisation
+
+
+serial communication is the process of sending 1 bit at a time.
+
+parallel communication is the process of sending multiple bit at a time.
+
+
+master can transmit 1 bit information using 1 clock pulse.
+
+LSB to MSB (sending order)
+
+
+If master have 0 on clockline, master has to write 0 on dataline. Then clockline goes 1 then 1 on dataline. When 1 on dataline slave read information only 1  time.
+
+
+
+
+	-----------------					-----------------
+	|		|					|		|
+	|		| 					|		|
+	|		|					|		|
+	|   01010110	|---------------------------------------|		|
+	|		|		dataline		|    		|
+	|		|					|		|
+	|		|	   1				|		|
+	|		|	0 ____ 		     		|		|
+	|		|	__|  |				|		|	
+	|		|-------------------------------------->|		|	
+	|    master	|		clockline		|		|
+	|		|					|     slave	|
+	-----------------					-----------------
+
+
+1. Initial state : master and slave device are ready for communication 
+		
+		clockline is low(0), indicating the start of communication.
+		
+		Dataline is idle
+
+		Master is ready to transmit the data "01010110"
+
+
+2. Clockline is low(0) : * since the clockline is low, the master writes 0 on the dataline.
+
+		      	 * The dataline reflects the binary data being transmitted, so its set to 0
+
+3. Clockline Transition : * The clockline transitions from low(0) to high(1), indicating the start of a new bit transmission.
+
+		       	  * This transition signals the start of data transmission 
+
+
+4. Slave Reads Data     : * Upon the rising edge of the clockline, the slave device reads the data present on the dataline 
+		
+		          * in this example, the slave reads the first bit (0) from the dataline.
+
+5. Repeat steps 2 - 4 : * steps 2-4 are repeated for each bit of data (01010110) transmitted from the master to the slave.
+		       
+ 			* The clockline transitions between high and low for each bit, and the slave reads corresponding data b				it from the dataline.
+
+6. End of transmission : * Once all bits of data have been transmitted, the communication ends.			
+			
+			 * Both devices return to idle state, ready for further communication if needed
+
+ 
+
+In tx and rx master will only generate clock pulses.
+
+If clockline remains high for longtime slave will read dataline one time.
+
+
+
+	  1
+   ______________
+ 0 |                    
+___|			->  1 bit data transmision 
+
+
+     1       1       1
+   _____   _____   _____
+ 0 |   | 0 |   | 0 |   |     -> 3 bit data transmision 
+___|   |___|   |___|   |___
+
+
+
+
+slave have predefined speed, speed can't be changed.
+
+Master speed > slave speed
+
+need to match both speed for synchronisation.
+
+if 1kbps slave can transmit or recieve upto 1kbps.
+
+Then F = 1kbps
+
+	Tbit = 1 / F
+
+	Tbit = 1/10^3 = 1ms
+
+	if master sends 1 bit in < 1 ms, in this case slave willn't accept.
+
+	By altering clockpulse we can speed up sending.
+
+	If master sends 1 bit in >= 1 ms then slave can accept.
+
+	
+
+	clockpulse time 
+
+		master speed >= slave speed
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

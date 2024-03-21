@@ -1,0 +1,399 @@
+LPC2129 UART SFRs
+------------------
+
+UART0 				
+-----				       
+
+ 
+1. U0THR 			     
+
+2. U0RBR			     
+
+3. U0LCR			     
+
+4. U0LSR			     
+
+5. U0DLL
+
+6. U0DLM
+
+7. U0FCR
+
+8. U0IER
+
+9. U0IIR
+
+
+
+U0THR (UART0 Transmitter Holding Register)
+------------------------------------------
+
+* This register holds the data to be transmitted
+
+* Writing to this register will start the data - transmission
+
+* Size of this register is 1 byte 
+
+* It is only write only register
+
+* The divisor Latch Access Bit (DLAB) in U0LCR must be zero in order to access the U0THR.
+
+
+
+U0TSR (uart0 Transmit shift register)
+------------------------------------
+
+* when we write data in U0THR. THRE flag becomes 0. It indicates U0THR is holding valid data
+
+* After immediately data shift from U0THR to U0TSR. Then U0THR becomes empty.
+
+* U0TSR can be only accessed by uart. User can't accesss. It is internal to UART	
+
+* If U0TSR holding the data then data transfer from U0THR to U0TSR don't happens.
+
+
+
+	THRE flag indicates data transmitted or not.
+
+
+UART0 Reciever Buffer (U0RBR)
+----------------------------
+
+* This register holds the received data.
+
+* It contains the "oldest" recieved byte in the recieve FIFO.
+
+* size of this register is 1 byte.
+
+* After reading U0RBR, this register becomes empty.
+
+* If the recieved character is less than 8 bits, the unused MSBs are padded with zeroes.
+
+* The DLAB in U0LCR must be 0 in order to access the U0RBR.
+
+* U0RB is always read only.
+
+
+
+U0LCR (UART0 Line control register)
+-----------------------------------
+
+	    7	     6       5   4      3          2           1     0
+	------------------------------------------------------------------
+	|	|	  |	    |	     |		   |		 |
+	| DLAB  |  Break  |  Parity | Parity | Stop        | Word Length |
+	|	| control |  select | Enable | bit select  |   select	 |	UOLCR
+	|	|         |         |	     |             | 		 |
+	------------------------------------------------------------------
+
+
+* It is a 1 byte register
+
+* Determines the format of the data character is to be transmitted or recieved.
+
+
+
+   Bit	1 : 0	word Length Select
+
+	0   0 	5 bit character length
+
+	0   1	6 bit character length
+
+	1   0   7 bit character length
+
+	1   1   8 bit character length
+
+	
+
+   Bit  2 	number of stop bits
+
+	0	1 stop bit
+
+	1	2 stop bits
+
+
+Why two stop bits are used in UART data frame ?
+
+* for higher baudrates (115200 bps or 921600 bps)
+
+* this extra stop bit time will provide a small processing time to reciever microcontroller.
+
+   
+   Bit  3 	Parity Enable
+
+	0	Disable parity generation and checking
+
+	1	Enable parity generation and checking
+
+
+   Bit  4 : 5	Parity select
+
+	0   0   odd parity
+
+	0   1   even parity
+
+	1   0   forced "1" stick parity  (parity flag is alwasys transmitted as one irrespective of data)
+
+	1   1   forced '0' stick parity	
+
+
+Bit 3 is parity enable bit , if parity enable bit is set then only 4 and 5 bit check otherwise 4 and 5 are don't care.
+
+
+If we need to send value > 255 choose forced 1 stick
+
+	
+   Bit  6 	Break control
+
+	0 	disable break transimission 
+
+	1	enable break transmission
+
+	
+	* used in telecommunication for debugging purpose.
+
+
+   Bit  7 	Divisor latch access bit (DLAB)
+
+	1	Enable access to divisor latches
+
+	0 	Disable access to divisor latches
+
+
+
+U0LSR (UART0 Line Status Register)
+----------------------------------
+
+* provides status information on the UART0 Tx and Rx blocks.
+
+								
+	      7	 	6      5      4      3	    2	  1	  0	
+	-----------------------------------------------------------------
+	|	    |	   |	   |	  |	 |    |	     |		|
+	|   RXFE    | TEMT | THRE  |  BI  |  FE  | PE |  OE  | 	 RDR	|
+	|  	    |	   |       |	  |      |    |      |		|
+	-----------------------------------------------------------------
+
+Receiver Data Ready(RDR)
+
+Overrun Error(OE)
+
+Parity Error (PE)
+
+Framing Error(FE)
+
+Break Interrupt(BI)
+
+Transmitter Holding Register Empty(THRE)
+
+Transmitter Empty(TEMT)
+
+Error in Rx FIFO(RXFE
+
+
+Reciever Data ready (RDR) 
+
+	0 -> Data is not recieved in U0RBR
+
+	1 -> Data is recieved in U0RBR
+
+THRE Flag is bit no.5 
+
+	0 -> Data is not transmitted & U0THR holding valid data
+
+	1 -> Data is transmitted & U0THR is empty
+
+
+TEMT -> Transmitter empty
+
+
+
+Selecting pin functionalities
+-----------------------------
+
+
+ 	Alternative pin 
+		  functionalities
+	      /\
+	     /	\
+	    /	 \	------------------
+	  		|		 |
+	 		|		 |
+	P 0.0/TXD/PWM1 	|		 |
+	----------------|  P 0.0 	 |
+			|		 |
+			|		 |
+			|		 |
+   P 0.1/RxD0/PWM3/EINT0|		 |
+	----------------|  P 0.1 	 |
+       \	 /	|		 |
+	\	/	|		 |
+	 \     /	|		 |
+	  \   /		------------------
+	   \ /
+
+	Alt pins functionalities
+
+
+
+PINSEL 
+------
+
+* This reg is used to select pin functionality.
+
+
+PINSEL (32 bits)
+----------------
+
+1. PINSEL0 (P0.0 - P0.15 settings)
+
+2. PINSEL1 (P0.15 - P0.31 settings)
+
+3. PINSEL2 (P1.16 - P1.31 settings)
+
+
+
+PINSEL0 
+-------
+
+RESET value is 0
+
+
+First bit	Zero bit	P0.0 Functionality
+
+   0		   0		   GPIO (default)
+
+   0		   1		   TxD0
+
+   1		   0		   PWM1
+
+   1		   1		   Reserved
+
+
+PINSEL0 = 1;	// TxD0
+
+PINSEL0 = 2;	// PWM1
+
+
+
+Third bit	Second bit	P0.1 functionality
+
+  0		   0		  GPIO (default)
+
+  0		   1		  RxD0
+
+  1 		   0 		  PWM3
+
+  1		   1		  EINT0
+
+
+PINSEL0 |= 5; 	// P0.0 -> TxD0  // P0.1 -> RxD0
+
+PINSEL0 |= 1;	// P0.1 -> RxD0 // P0.0 -> TxD0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   
+	
+
+

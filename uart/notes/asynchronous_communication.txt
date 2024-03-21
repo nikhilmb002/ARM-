@@ -1,0 +1,86 @@
+Asychronous serial communication
+--------------------------------
+
+*There is no clockline used between reciever & transmitter
+
+*The major parameter used here for synchronisation is same baudrate / speed between tx and rx
+
+	
+
+	-----------------			-----------------
+	|		|			|		|
+	|		|			|		|
+	|		|			|		|
+	|		|      dataline		|		|
+	|		|---------------------->| 		|
+	|	  	|			|		|
+	|		|   			|   01000001    |
+	|  		|			|   		|
+	|   01000001	|			|		|
+	|   		|			|		|
+	| 		|			|		|	
+	-----------------			-----------------
+
+	   transmitter				   reciever
+			 dataframe/datapacket
+			_______________________
+			|  |		  |   |
+       start bit <------| 1|   0100 0001  | 0 |
+			|__|______________|___|
+
+
+
+Idle condition -> means default value (0/1) of the dataline when the tx and rx are not communicating.
+
+If Idle condition changed then only rx will recieve data. In Idle condition rx will only monitor don't recieve.
+
+Data transmission will only start after writing data on Tx-buffer.
+
+By writing 0 can change idle condition. Tx will send extra bit '0' to dataline for that. This 0 don't take as databit.
+
+
+If Baudrate = 9600 bps
+
+	then
+
+	Tbit = 1 / 9600 = 104 us
+
+
+After 8th databit reciever doesn't accept 9th bit.
+
+extrabit in dataframe are used for synchronising.
+
+If Tx speed is more and Rx speed is small Tx gets wrong data.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

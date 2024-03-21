@@ -1,0 +1,126 @@
+Features of UART protocol
+-------------------------
+
+* UART was designed by an americal engineer named "Gorden bell".
+
+* 2 wired communication protocol
+
+	-> RxD (recieved data)
+
+	-> TxD (transmit data)
+
+
+
+	-------------------------					----------------------
+	|			|					|		     |
+	|      Any uc		|					|  		     |
+	|			|					|		     |
+	|	           TxD  |-------->--------\     /---------<-----|   TxD		     |
+	|  -------------	|		   \   /		|		     |
+	|  |	       |	|  		    \ /			|		     |	
+	|  | uart port |	|    		     /\			|	 Any UART    |
+	|  |           |	|		    /  \		|		     |
+	|  -------------  	|    		   /    \		|	   Device    |
+	|			|		  /      \		|                    |
+	|		   RxD	|---------<------/        \-------->----|   RxD		     |
+	|			|					|		     |
+	|			|					| 		     |
+	|			|					| 		     |
+	-------------------------					----------------------
+
+
+* UART if full-duplex & asynchronous serial communication protocol.
+
+	full duplex communication allows data transmission in both directions simultaneously.
+
+* Max speed of UART is upto 1 Mbps
+
+
+
+List of std baudrates
+---------------------
+
+* 110 bps 	* 4800 bps	*7200 bps	* 9600 bps	*19200 bps
+
+* 28800 bps	* 57600 bps	* 115200 bps	* 921600 bps
+
+
+*UART is designed for peer to peer communication.
+
+
+	---------------
+	|	      |
+	|	  TxD |----------------------------------------------------
+	|	      |		|	 			 |	
+	|	      |		|				 |
+	|         RxD |---------------------------------------------------
+	|	      |		|	|			 |	|
+	|	      |		|	|    -------		 |	|    ------
+	|    Any uc   |		|	-----|TxD  |		 |  	-----|TxD |
+	|	      |		-------------|RxD  |		 ------------|RxD |
+	|  	      |			     |     |			     |    |
+	|	      |			     |  D1 |			     | D2 |
+	|	      |			     -------			     ------
+	---------------                      Biometric 
+						sensor
+	
+
+	uc is always master, there is no multi slave option in uart, it is on I2C and SPI.
+
+
+* minimum 5 bits & maximum 8 bits can be transmitted in the dataframe as data.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
